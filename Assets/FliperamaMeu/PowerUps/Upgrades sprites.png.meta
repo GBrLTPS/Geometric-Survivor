@@ -1,0 +1,516 @@
+fileFormatVersion: 2
+guid: c8831b0b36b259647b543927135c0118
+TextureImporter:
+  internalIDToNameTable: []
+  externalObjects: {}
+  serializedVersion: 13
+  mipmaps:
+    mipMapMode: 0
+    enableMipMap: 0
+    sRGBTexture: 1
+    linearTexture: 0
+    fadeOut: 0
+    borderMipMap: 0
+    mipMapsPreserveCoverage: 0
+    alphaTestReferenceValue: 0.5
+    mipMapFadeDistanceStart: 1
+    mipMapFadeDistanceEnd: 3
+  bumpmap:
+    convertToNormalMap: 0
+    externalNormalMap: 0
+    heightScale: 0.25
+    normalMapFilter: 0
+    flipGreenChannel: 0
+  isReadable: 0
+  streamingMipmaps: 0
+  streamingMipmapsPriority: 0
+  vTOnly: 0
+  ignoreMipmapLimit: 0
+  grayScaleToAlpha: 0
+  generateCubemap: 6
+  cubemapConvolution: 0
+  seamlessCubemap: 0
+  textureFormat: 1
+  maxTextureSize: 2048
+  textureSettings:
+    serializedVersion: 2
+    filterMode: 1
+    aniso: 1
+    mipBias: 0
+    wrapU: 1
+    wrapV: 1
+    wrapW: 0
+  nPOTScale: 0
+  lightmap: 0
+  compressionQuality: 50
+  spriteMode: 2
+  spriteExtrude: 1
+  spriteMeshType: 1
+  alignment: 0
+  spritePivot: {x: 0.5, y: 0.5}
+  spritePixelsToUnits: 100
+  spriteBorder: {x: 0, y: 0, z: 0, w: 0}
+  spriteGenerateFallbackPhysicsShape: 1
+  alphaUsage: 1
+  alphaIsTransparency: 1
+  spriteTessellationDetail: -1
+  textureType: 8
+  textureShape: 1
+  singleChannelComponent: 0
+  flipbookRows: 1
+  flipbookColumns: 1
+  maxTextureSizeSet: 0
+  compressionQualitySet: 0
+  textureFormatSet: 0
+  ignorePngGamma: 0
+  applyGammaDecoding: 0
+  swizzle: 50462976
+  cookieLightType: 0
+  platformSettings:
+  - serializedVersion: 4
+    buildTarget: DefaultTexturePlatform
+    maxTextureSize: 2048
+    resizeAlgorithm: 0
+    textureFormat: -1
+    textureCompression: 1
+    compressionQuality: 50
+    crunchedCompression: 0
+    allowsAlphaSplitting: 0
+    overridden: 0
+    ignorePlatformSupport: 0
+    androidETC2FallbackOverride: 0
+    forceMaximumCompressionQuality_BC6H_BC7: 0
+  - serializedVersion: 4
+    buildTarget: Standalone
+    maxTextureSize: 2048
+    resizeAlgorithm: 0
+    textureFormat: -1
+    textureCompression: 1
+    compressionQuality: 50
+    crunchedCompression: 0
+    allowsAlphaSplitting: 0
+    overridden: 0
+    ignorePlatformSupport: 0
+    androidETC2FallbackOverride: 0
+    forceMaximumCompressionQuality_BC6H_BC7: 0
+  - serializedVersion: 4
+    buildTarget: Android
+    maxTextureSize: 2048
+    resizeAlgorithm: 0
+    textureFormat: -1
+    textureCompression: 1
+    compressionQuality: 50
+    crunchedCompression: 0
+    allowsAlphaSplitting: 0
+    overridden: 0
+    ignorePlatformSupport: 0
+    androidETC2FallbackOverride: 0
+    forceMaximumCompressionQuality_BC6H_BC7: 0
+  spriteSheet:
+    serializedVersion: 2
+    sprites:
+    - serializedVersion: 2
+      name: Upgrades sprites_0
+      rect:
+        serializedVersion: 2
+        x: 52
+        y: 637
+        width: 272
+        height: 267
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 3e236d6fcfae5544783c23a346e6ae54
+      internalID: -249838276
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Upgrades sprites_2
+      rect:
+        serializedVersion: 2
+        x: 388
+        y: 660
+        width: 220
+        height: 233
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 8a0a28c26bf94c4449bfb13fa96a8f0b
+      internalID: 820366992
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Upgrades sprites_3
+      rect:
+        serializedVersion: 2
+        x: 692
+        y: 666
+        width: 214
+        height: 198
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 11d9e0cdd8d3a454489dd76e081b5a9b
+      internalID: 12574084
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Upgrades sprites_7
+      rect:
+        serializedVersion: 2
+        x: 1322
+        y: 658
+        width: 227
+        height: 212
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 1810b9876a53a2f4bada47dc77a53dc4
+      internalID: 1969822403
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Upgrades sprites_13
+      rect:
+        serializedVersion: 2
+        x: 54
+        y: 384
+        width: 251
+        height: 179
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 3adce269f30862e49b394b363280a305
+      internalID: -809880306
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Upgrades sprites_17
+      rect:
+        serializedVersion: 2
+        x: 696
+        y: 348
+        width: 179
+        height: 264
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 98e57ceb9e433444f8065bce0f51b076
+      internalID: -1570012809
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Upgrades sprites_18
+      rect:
+        serializedVersion: 2
+        x: 979
+        y: 357
+        width: 258
+        height: 219
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: aeac9ed4a473b4a41b4c9a0040fc7f34
+      internalID: -1540842399
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Upgrades sprites_19
+      rect:
+        serializedVersion: 2
+        x: 1320
+        y: 354
+        width: 252
+        height: 232
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 51909f11c6c13a1448a4a3f812f47b29
+      internalID: 1816194712
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Upgrades sprites_33
+      rect:
+        serializedVersion: 2
+        x: 372
+        y: 99
+        width: 245
+        height: 187
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 81eefbd68337d404b8c6894e53294d3b
+      internalID: 1225284026
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Upgrades sprites_34
+      rect:
+        serializedVersion: 2
+        x: 678
+        y: 100
+        width: 246
+        height: 153
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 46f7e15d4c333e744af9e66c22979cd9
+      internalID: -986104442
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Upgrades sprites_35
+      rect:
+        serializedVersion: 2
+        x: 985
+        y: 114
+        width: 266
+        height: 108
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 9b9428cde70f6c144aea440e5bfd214f
+      internalID: 737514890
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Upgrades sprites_1
+      rect:
+        serializedVersion: 2
+        x: 1297
+        y: 34
+        width: 276
+        height: 281
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 88d4110387cf6344fb7a3eebec7f2e69
+      internalID: -1496720275
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Upgrades sprites_9
+      rect:
+        serializedVersion: 2
+        x: 55
+        y: 67
+        width: 258
+        height: 242
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 8a8c2fe6066433a479bc966f31f5a690
+      internalID: -1870925248
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Upgrades sprites_14
+      rect:
+        serializedVersion: 2
+        x: 395
+        y: 348
+        width: 173
+        height: 266
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 82d07e4eeabad7d4b9922b007102e709
+      internalID: -346521626
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Upgrades sprites_4
+      rect:
+        serializedVersion: 2
+        x: 988
+        y: 697
+        width: 284
+        height: 155
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 2a1879a8808ec0c45aed747ea9ee9e0d
+      internalID: 1967092089
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    outline: []
+    customData: 
+    physicsShape: []
+    bones: []
+    spriteID: 2fa49939684ddbf4692edba5989faf2d
+    internalID: 0
+    vertices: []
+    indices: 
+    edges: []
+    weights: []
+    secondaryTextures: []
+    spriteCustomMetadata:
+      entries:
+      - key: SpriteEditor.SliceSettings
+        value: '{"sliceOnImport":false,"gridCellCount":{"x":1.0,"y":1.0},"gridSpriteSize":{"x":64.0,"y":64.0},"gridSpriteOffset":{"x":0.0,"y":0.0},"gridSpritePadding":{"x":0.0,"y":0.0},"pivot":{"x":0.5,"y":0.5},"pivotPixels":{"x":0.0,"y":0.0},"autoSlicingMethod":0,"spriteAlignment":0,"pivotUnitMode":0,"slicingType":0,"keepEmptyRects":false,"isAlternate":false}'
+    nameFileIdTable:
+      Upgrades sprites_0: -249838276
+      Upgrades sprites_1: -1496720275
+      Upgrades sprites_10: 346224061
+      Upgrades sprites_11: 1300397715
+      Upgrades sprites_12: 781932101
+      Upgrades sprites_13: -809880306
+      Upgrades sprites_14: -346521626
+      Upgrades sprites_15: 837686774
+      Upgrades sprites_16: 1899640414
+      Upgrades sprites_17: -1570012809
+      Upgrades sprites_18: -1540842399
+      Upgrades sprites_19: 1816194712
+      Upgrades sprites_2: 820366992
+      Upgrades sprites_20: 420101680
+      Upgrades sprites_21: 1224462549
+      Upgrades sprites_22: 1070612875
+      Upgrades sprites_23: -1163089405
+      Upgrades sprites_24: -294931144
+      Upgrades sprites_25: -1279176217
+      Upgrades sprites_26: 461583551
+      Upgrades sprites_27: -1685825169
+      Upgrades sprites_28: -1265194862
+      Upgrades sprites_29: -160819323
+      Upgrades sprites_3: 12574084
+      Upgrades sprites_30: -1691960892
+      Upgrades sprites_31: -882846219
+      Upgrades sprites_32: -1129494423
+      Upgrades sprites_33: 1225284026
+      Upgrades sprites_34: -986104442
+      Upgrades sprites_35: 737514890
+      Upgrades sprites_36: -131546536
+      Upgrades sprites_37: 1553935959
+      Upgrades sprites_38: -640666107
+      Upgrades sprites_39: -1555473964
+      Upgrades sprites_4: 1967092089
+      Upgrades sprites_40: -1439195538
+      Upgrades sprites_41: 1374713089
+      Upgrades sprites_42: 931649195
+      Upgrades sprites_43: 421190159
+      Upgrades sprites_44: 1648043231
+      Upgrades sprites_45: 330661527
+      Upgrades sprites_46: 955458883
+      Upgrades sprites_47: 950259448
+      Upgrades sprites_48: 1242624130
+      Upgrades sprites_49: 623260405
+      Upgrades sprites_5: -155801031
+      Upgrades sprites_50: 1416977057
+      Upgrades sprites_51: 535411437
+      Upgrades sprites_52: 171526962
+      Upgrades sprites_53: -926349645
+      Upgrades sprites_6: 2045138761
+      Upgrades sprites_7: 1969822403
+      Upgrades sprites_8: 1838226977
+      Upgrades sprites_9: -1870925248
+  mipmapLimitGroupName: 
+  pSDRemoveMatte: 0
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 

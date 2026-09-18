@@ -1,0 +1,10 @@
+# ninja log v5
+32	3933	8096761914815285	GameActivity/CMakeFiles/game.dir/UGAEntry.cpp.o	79cea0e27dcc9aac
+23	4147	8096761916187753	GameActivity/CMakeFiles/game.dir/UGAConfiguration.cpp.o	a922c2062fb62059
+69	4153	8096761916663602	GameActivity/CMakeFiles/game.dir/UGAInputMotionEvent.cpp.o	b71c79effea4916c
+43	4197	8096761917340644	GameActivity/CMakeFiles/game.dir/UGAInputKeyEvent.cpp.o	582f2088a7a34576
+1	4215	8096761917780770	GameActivity/CMakeFiles/game.dir/UGADebug.cpp.o	a218df4afd1a4145
+54	4522	8096761920831528	GameActivity/CMakeFiles/game.dir/UGAInput.cpp.o	3a854c60076f89a1
+78	4595	8096761921769386	GameActivity/CMakeFiles/game.dir/UGASoftKeyboard.cpp.o	9a270e8912d39c69
+14	4887	8096761924742803	GameActivity/CMakeFiles/game.dir/UGAApplication.cpp.o	8108928b8d009268
+4887	5104	8096761927042297	C:/Users/gabri/StandDeTiro - Inicio para Gabriel/Library/Bee/Android/Prj/IL2CPP/Gradle/unityLibrary/build/intermediates/cxx/RelWithDebInfo/603b5r51/obj/arm64-v8a/libgame.so	52c0ae9fa64fb923
