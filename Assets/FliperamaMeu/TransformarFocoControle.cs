@@ -1,4 +1,5 @@
 using UnityEngine;
+using UnityEngine.SceneManagement; // Necessário para trocar de cena
 using UnityEngine.XR.Interaction.Toolkit;
 using UnityEngine.XR.Interaction.Toolkit.Interactables;
 using UnityEngine.XR.Interaction.Toolkit.Locomotion.Movement;
@@ -7,6 +8,14 @@ using UnityEngine.XR.Interaction.Toolkit.Locomotion.Jump;
 [RequireComponent(typeof(XRSimpleInteractable), typeof(Collider))]
 public class ArcadeCabinetInteractable : MonoBehaviour
 {
+    [Header("Troca de Cena & Mensagem")]
+    [Tooltip("Deixe em branco se quiser apenas teleportar na mesma cena")]
+    [SerializeField] private string sceneToLoad = "";
+
+    [Tooltip("Mensagem ou ID customizado para log/processamento ao interagir")]
+    [TextArea(2, 4)]
+    [SerializeField] private string customMessage = "";
+
     [Header("Referências de Controle")]
     [SerializeField] private ArcadeCharacter2D arcadeCharacter;
     
@@ -87,6 +96,12 @@ public class ArcadeCabinetInteractable : MonoBehaviour
         UnityEditor.Selection.activeObject = null;
 #endif
 
+        // Exibe a mensagem personalizada no Console se ela estiver preenchida
+        if (!string.IsNullOrEmpty(customMessage))
+        {
+            Debug.Log($"<color=cyan>[ArcadeCabinet]: {customMessage}</color>");
+        }
+
         bool activate = !arcadeCharacter.isPlaying;
 
         // 1. Liga/Desliga o controle do personagem 2D
@@ -146,6 +161,12 @@ public class ArcadeCabinetInteractable : MonoBehaviour
             {
                 cc.enabled = true; // Reativa o CharacterController
             }
+        }
+
+        // 4. Executa a troca de cena (se o campo "Scene To Load" estiver preenchido)
+        if (!string.IsNullOrEmpty(sceneToLoad))
+        {
+            SceneManager.LoadScene(sceneToLoad);
         }
     }
 }

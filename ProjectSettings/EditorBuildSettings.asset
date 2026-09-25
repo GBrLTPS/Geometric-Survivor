@@ -9,10 +9,13 @@ EditorBuildSettings:
     path: Assets/Scenes/SampleScene.unity
     guid: 55daccc09a3b69647bbab145b54a3ab3
   - enabled: 1
-    path: Assets/_Recovery/0 (3).unity
+    path: Assets/VRTemplateAssets/Prefabs/Meus/Fases/Menu.unity
     guid: d461c4762b1a80c40b26dcc4eec4bc6e
   - enabled: 1
-    path: Assets/VRTemplateAssets/Prefabs/Meus/Fases/Menu.unity
+    path: Assets/VRTemplateAssets/Prefabs/Meus/Fases/NoJogo2D.unity
+    guid: d8c35ca3cba7d6a47b20fcbf15ab1cf2
+  - enabled: 0
+    path: Assets/VRTemplateAssets/Prefabs/Meus/Fases/MenuOLD.unity
     guid: 981200060445ad64297965cc625e3a07
   - enabled: 1
     path: Assets/VRTemplateAssets/Prefabs/Meus/Fases/FaseTreino.unity
