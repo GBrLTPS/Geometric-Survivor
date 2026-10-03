@@ -43,6 +43,15 @@ public class ArcadeCharacter2D : MonoBehaviour
     public float fallMultiplier = 2.5f;
     public float lowJumpMultiplier = 2f;
 
+    [Header("Sons e Áudio do Personagem")]
+    public AudioSource audioSource;
+    public AudioClip jumpSound;
+    public AudioClip wallJumpSound;
+    public AudioClip dashSound;
+    public AudioClip footstepSound;
+    [Tooltip("Intervalo em segundos entre cada som de passo enquanto caminha")]
+    public float footstepInterval = 0.35f;
+
     [Header("Locomoção VR")]
     public ContinuousMoveProvider moveProvider;
 
@@ -63,6 +72,7 @@ public class ArcadeCharacter2D : MonoBehaviour
     private float lastMoveDirection = 1f;
     private bool jumpRequested;
     private bool dashRequested;
+    private float nextFootstepTime = 0f;
 
     private float CurrentSpeed => stats != null ? stats.moveSpeed : speed;
     private float CurrentJumpForce => stats != null ? stats.jumpForce : jumpForce;
@@ -74,6 +84,15 @@ public class ArcadeCharacter2D : MonoBehaviour
         rb = GetComponent<Rigidbody2D>();
         col = GetComponent<Collider2D>();
         stats = GetComponent<ArcadeCharacterStats>();
+
+        if (audioSource == null)
+        {
+            audioSource = GetComponent<AudioSource>();
+            if (audioSource == null)
+            {
+                audioSource = gameObject.AddComponent<AudioSource>();
+            }
+        }
 
         if (rb != null)
         {
@@ -196,6 +215,9 @@ public class ArcadeCharacter2D : MonoBehaviour
             canDash = false;
             dashRequested = true;
         }
+
+        // 5. Som de Passos (ao caminhar no chão)
+        HandleFootsteps();
     }
 
     private void FixedUpdate()
@@ -243,6 +265,7 @@ public class ArcadeCharacter2D : MonoBehaviour
         {
             canGroundJump = false;
             rb.linearVelocity = new Vector2(rb.linearVelocity.x, CurrentJumpForce);
+            PlaySound(jumpSound);
             return;
         }
 
@@ -260,12 +283,12 @@ public class ArcadeCharacter2D : MonoBehaviour
         {
             airJumpsRemaining--;
             rb.linearVelocity = new Vector2(rb.linearVelocity.x, CurrentJumpForce);
+            PlaySound(jumpSound);
         }
     }
 
-        private int CheckWallDirection()
+    private int CheckWallDirection()
     {
-        // Se estiver no chão, desativa a checagem de parede para não dar o pulo infinito
         if (canGroundJump) return 0;
     
         float extentX = col != null ? col.bounds.extents.x : 0.5f;
@@ -274,7 +297,6 @@ public class ArcadeCharacter2D : MonoBehaviour
         Vector2 rightOrigin = origin + new Vector2(extentX + 0.05f, 0f);
         Vector2 leftOrigin = origin + new Vector2(-extentX - 0.05f, 0f);
     
-        // Raio para a direita (+1)
         RaycastHit2D hitPos = Physics2D.Raycast(rightOrigin, Vector2.right, wallCheckDistance);
         if (hitPos.collider != null && !hitPos.collider.isTrigger && !hitPos.transform.IsChildOf(transform))
         {
@@ -282,7 +304,6 @@ public class ArcadeCharacter2D : MonoBehaviour
                 return 1;
         }
     
-        // Raio para a esquerda (-1)
         RaycastHit2D hitNeg = Physics2D.Raycast(leftOrigin, Vector2.left, wallCheckDistance);
         if (hitNeg.collider != null && !hitNeg.collider.isTrigger && !hitNeg.transform.IsChildOf(transform))
         {
@@ -298,6 +319,8 @@ public class ArcadeCharacter2D : MonoBehaviour
         isWallJumping = true;
         canDash = true;
         airJumpsRemaining = CurrentMaxAirJumps;
+
+        PlaySound(wallJumpSound != null ? wallJumpSound : jumpSound);
 
         if (rb != null)
         {
@@ -330,6 +353,8 @@ public class ArcadeCharacter2D : MonoBehaviour
         isDashing = true;
         float direction = Mathf.Abs(moveInput) > 0.1f ? Mathf.Sign(moveInput) : lastMoveDirection;
 
+        PlaySound(dashSound);
+
         if (rb != null)
         {
             rb.linearVelocity = new Vector2(direction * CurrentDashForce, dashUpForce);
@@ -337,6 +362,21 @@ public class ArcadeCharacter2D : MonoBehaviour
 
         yield return new WaitForSeconds(dashDuration);
         isDashing = false;
+    }
+
+    private void HandleFootsteps()
+    {
+        bool isGrounded = groundDetector != null && groundDetector.isGrounded;
+        bool isMovingHorizontally = Mathf.Abs(moveInput) > 0.1f;
+
+        if (isGrounded && isMovingHorizontally && !isDashing)
+        {
+            if (Time.time >= nextFootstepTime)
+            {
+                PlaySound(footstepSound);
+                nextFootstepTime = Time.time + footstepInterval;
+            }
+        }
     }
 
     private void ApplyBetterGravity()
@@ -362,6 +402,20 @@ public class ArcadeCharacter2D : MonoBehaviour
             moveProvider.enabled = true;
         }
         Debug.Log("Saiu do fliperama.");
+    }
+
+    private void PlaySound(AudioClip clip)
+    {
+        if (clip == null) return;
+
+        if (audioSource != null)
+        {
+            audioSource.PlayOneShot(clip);
+        }
+        else
+        {
+            AudioSource.PlayClipAtPoint(clip, transform.position);
+        }
     }
 
     private void OnDrawGizmosSelected()

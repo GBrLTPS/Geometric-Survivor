@@ -35,6 +35,14 @@ public class ArcadeEnemy : MonoBehaviour, IDamageable
     public float flashDuration = 0.08f;
     public Color damageFlashColor = Color.white;
 
+    [Header("Sons e Efeitos de Áudio")]
+    [Tooltip("Som disparado quando o inimigo toma dano")]
+    public AudioClip hitSound;
+    [Tooltip("Som disparado quando o inimigo morre")]
+    public AudioClip dieSound;
+    [Tooltip("Componente AudioSource opcional (se não arrastar, o script pega o do objeto ou toca via PlayClipAtPoint)")]
+    public AudioSource audioSource;
+
     private float currentHealth;
     private Rigidbody2D rb;
     private Transform playerTransform;
@@ -72,6 +80,12 @@ public class ArcadeEnemy : MonoBehaviour, IDamageable
             {
                 originalColor = genericRenderer.material.color;
             }
+        }
+
+        // Procura o AudioSource caso não tenha sido atribuído no Inspector
+        if (audioSource == null)
+        {
+            audioSource = GetComponent<AudioSource>();
         }
 
         currentHealth = maxHealth;
@@ -204,6 +218,9 @@ public class ArcadeEnemy : MonoBehaviour, IDamageable
     {
         currentHealth -= amount;
 
+        // 🔊 TOCA O SOM DE ACERTO/DANO
+        PlaySound(hitSound);
+
         if (gameObject.activeInHierarchy)
         {
             if (flashRoutine != null) StopCoroutine(flashRoutine);
@@ -244,6 +261,12 @@ public class ArcadeEnemy : MonoBehaviour, IDamageable
 
     private void Die()
     {
+        // 🔊 TOCA O SOM DE MORTE (usando PlayClipAtPoint para não cortar quando o GameObject for destruído)
+        if (dieSound != null)
+        {
+            AudioSource.PlayClipAtPoint(dieSound, transform.position);
+        }
+
         if (cachedPlayerStats != null)
         {
             cachedPlayerStats.OnEnemyKilled();
@@ -255,6 +278,23 @@ public class ArcadeEnemy : MonoBehaviour, IDamageable
         }
 
         Destroy(gameObject);
+    }
+
+    /// <summary>
+    /// Função responsável por tocar o som sem cortar se houverem acertos rápidos.
+    /// </summary>
+    private void PlaySound(AudioClip clip)
+    {
+        if (clip == null) return;
+
+        if (audioSource != null)
+        {
+            audioSource.PlayOneShot(clip);
+        }
+        else
+        {
+            AudioSource.PlayClipAtPoint(clip, transform.position);
+        }
     }
 
     private void OnCollisionEnter2D(Collision2D collision)

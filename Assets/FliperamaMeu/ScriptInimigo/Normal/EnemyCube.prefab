@@ -110,7 +110,7 @@ Rigidbody2D:
   m_LinearDamping: 0
   m_AngularDamping: 0.05
   m_GravityScale: 1
-  m_Material: {fileID: 0}
+  m_Material: {fileID: 6200000, guid: 43d0eb8be1f2fd14aae75d77b5bfa0cc, type: 2}
   m_IncludeLayers:
     serializedVersion: 2
     m_Bits: 0
@@ -197,3 +197,6 @@ MonoBehaviour:
   knockbackForce: 3
   flashDuration: 0.08
   damageFlashColor: {r: 1, g: 1, b: 1, a: 1}
+  hitSound: {fileID: 8300000, guid: 2ec2214923331f44689ad1fae6c023b5, type: 3}
+  dieSound: {fileID: 8300000, guid: 3d093db770981604abff59d5d4862577, type: 3}
+  audioSource: {fileID: 0}

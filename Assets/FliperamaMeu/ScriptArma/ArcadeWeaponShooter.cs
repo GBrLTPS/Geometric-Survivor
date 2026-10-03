@@ -18,6 +18,12 @@ public class ArcadeWeaponShooter : MonoBehaviour
     public float baseSpreadAngle = 12f; // Abertura em graus para múltiplos tiros
     public int basePierce = 0; // Quantos inimigos perfura antes de sumir
 
+    [Header("Sons e Efeitos de Áudio")]
+    [Tooltip("Som disparado quando a arma atira")]
+    public AudioClip shootSound;
+    [Tooltip("Componente AudioSource opcional (se não arrastar, o script pega o do objeto ou toca via PlayClipAtPoint)")]
+    public AudioSource audioSource;
+
     [Header("Inputs VR (Gatilho da mão para atirar)")]
     [Tooltip("Botão para atirar contínuo ou manual")]
     public InputAction shootAction = new InputAction("Shoot", InputActionType.Button);
@@ -43,6 +49,12 @@ public class ArcadeWeaponShooter : MonoBehaviour
         stats = GetComponentInParent<ArcadeCharacterStats>();
 
         if (firePoint == null) firePoint = transform;
+
+        // Procura o AudioSource caso não tenha sido atribuído no Inspector
+        if (audioSource == null)
+        {
+            audioSource = GetComponent<AudioSource>();
+        }
     }
 
     private void OnEnable()
@@ -75,6 +87,9 @@ public class ArcadeWeaponShooter : MonoBehaviour
     {
         if (projectilePrefab == null || firePoint == null) return;
 
+        // 🔊 TOCA O SOM DO TIRO
+        PlayShootSound();
+
         int count = Mathf.Max(1, ProjectilesPerShot);
         float startAngle = -(count - 1) * (baseSpreadAngle * 0.5f);
 
@@ -96,6 +111,25 @@ public class ArcadeWeaponShooter : MonoBehaviour
             {
                 projectile.Setup(shootDir, BulletSpeed, Damage, PierceCount);
             }
+        }
+    }
+
+    /// <summary>
+    /// Função responsável por tocar o som de disparo sem cortar se o tiro for muito rápido.
+    /// </summary>
+    private void PlayShootSound()
+    {
+        if (shootSound == null) return;
+
+        if (audioSource != null)
+        {
+            // PlayOneShot permite tocar múltiplos tiros sobrepostos perfeitamente
+            audioSource.PlayOneShot(shootSound);
+        }
+        else
+        {
+            // Fallback caso não exista AudioSource no objeto
+            AudioSource.PlayClipAtPoint(shootSound, firePoint.position);
         }
     }
 }

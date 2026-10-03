@@ -221,6 +221,11 @@ MonoBehaviour:
   basePierceCount: 0
   baseBulletSpeed: 16
   basePickupRange: 2.5
+  audioSource: {fileID: 0}
+  takeDamageSound: {fileID: 0}
+  healSound: {fileID: 0}
+  lifeStealSound: {fileID: 0}
+  upgradeSound: {fileID: 0}
 --- !u!114 &5425588384970157268
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -249,6 +254,12 @@ MonoBehaviour:
   dashDuration: 0.15
   fallMultiplier: 2.5
   lowJumpMultiplier: 2
+  audioSource: {fileID: 0}
+  jumpSound: {fileID: 0}
+  wallJumpSound: {fileID: 0}
+  dashSound: {fileID: 0}
+  footstepSound: {fileID: 0}
+  footstepInterval: 0.35
   moveProvider: {fileID: 0}
   moveAction:
     m_Name: Move
@@ -643,6 +654,8 @@ MonoBehaviour:
   baseProjectilesPerShot: 1
   baseSpreadAngle: 12
   basePierce: 0
+  shootSound: {fileID: 0}
+  audioSource: {fileID: 0}
   shootAction:
     m_Name: Shoot
     m_Type: 1

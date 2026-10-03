@@ -24,6 +24,13 @@ public class ArcadeCharacterStats : MonoBehaviour
     [Header("Utilitários")]
     public float basePickupRange = 2.5f;
 
+    [Header("Sons e Efeitos de Áudio")]
+    public AudioSource audioSource;
+    public AudioClip takeDamageSound;
+    public AudioClip healSound;
+    public AudioClip lifeStealSound;
+    public AudioClip upgradeSound;
+
     // Atributos Atuais Dinâmicos
     public float currentHealth { get; private set; }
     public float maxHealth { get; private set; }
@@ -45,6 +52,15 @@ public class ArcadeCharacterStats : MonoBehaviour
 
     private void Awake()
     {
+        if (audioSource == null)
+        {
+            audioSource = GetComponent<AudioSource>();
+            if (audioSource == null)
+            {
+                audioSource = gameObject.AddComponent<AudioSource>();
+            }
+        }
+
         ResetToDefaults();
     }
 
@@ -53,7 +69,8 @@ public class ArcadeCharacterStats : MonoBehaviour
         // Regeneração de vida passiva por tempo (se ativa e não estiver com vida cheia)
         if (hpRegenPerSecond > 0f && currentHealth > 0 && currentHealth < maxHealth)
         {
-            Heal(hpRegenPerSecond * Time.deltaTime);
+            // Cura sem disparar o som a todo frame para não poluir o áudio
+            SilentHeal(hpRegenPerSecond * Time.deltaTime);
         }
     }
 
@@ -82,8 +99,22 @@ public class ArcadeCharacterStats : MonoBehaviour
     }
 
     // Métodos de Cura e Modificação de Atributos
-    public void FullHeal() { Heal(maxHealth); }
+    public void FullHeal() 
+    { 
+        Heal(maxHealth); 
+    }
+
     public void Heal(float amount)
+    {
+        if (amount <= 0 || currentHealth >= maxHealth) return;
+
+        currentHealth = Mathf.Min(maxHealth, currentHealth + amount);
+        PlaySound(healSound);
+        OnHealthChanged?.Invoke();
+    }
+
+    // Cura silenciosa interna (para a regeneração passiva por segundo)
+    private void SilentHeal(float amount)
     {
         currentHealth = Mathf.Min(maxHealth, currentHealth + amount);
         OnHealthChanged?.Invoke();
@@ -93,7 +124,8 @@ public class ArcadeCharacterStats : MonoBehaviour
     {
         if (lifeStealOnKill > 0f)
         {
-            Heal(lifeStealOnKill);
+            SilentHeal(lifeStealOnKill);
+            PlaySound(lifeStealSound);
         }
     }
 
@@ -101,32 +133,54 @@ public class ArcadeCharacterStats : MonoBehaviour
     {
         maxHealth += amount;
         if (healAmount) currentHealth += amount;
+        PlaySound(upgradeSound);
         OnHealthChanged?.Invoke();
     }
 
-    public void AddHpRegen(float amount) { hpRegenPerSecond += amount; OnStatsUpdated?.Invoke(); }
-    public void AddLifeStealOnKill(float amount) { lifeStealOnKill += amount; OnStatsUpdated?.Invoke(); }
-    public void AddMoveSpeed(float amount) { moveSpeed += amount; OnStatsUpdated?.Invoke(); }
-    public void AddJumpForce(float amount) { jumpForce += amount; OnStatsUpdated?.Invoke(); }
-    public void AddExtraJumps(int count) { extraJumps += count; OnStatsUpdated?.Invoke(); }
-    public void AddDashForce(float amount) { dashForce += amount; OnStatsUpdated?.Invoke(); }
-    public void AddAttackDamage(float amount) { attackDamage += amount; OnStatsUpdated?.Invoke(); }
-    public void AddAttackRate(float multiplier) { attackRate += multiplier; OnStatsUpdated?.Invoke(); }
-    public void AddProjectilesPerShot(int count) { projectilesPerShot += count; OnStatsUpdated?.Invoke(); }
-    public void AddPierceCount(int count) { pierceCount += count; OnStatsUpdated?.Invoke(); }
-    public void AddBulletSpeed(float amount) { bulletSpeed += amount; OnStatsUpdated?.Invoke(); }
-    public void AddPickupRange(float amount) { pickupRange += amount; OnStatsUpdated?.Invoke(); }
+    public void AddHpRegen(float amount) { hpRegenPerSecond += amount; NotifyUpgrade(); }
+    public void AddLifeStealOnKill(float amount) { lifeStealOnKill += amount; NotifyUpgrade(); }
+    public void AddMoveSpeed(float amount) { moveSpeed += amount; NotifyUpgrade(); }
+    public void AddJumpForce(float amount) { jumpForce += amount; NotifyUpgrade(); }
+    public void AddExtraJumps(int count) { extraJumps += count; NotifyUpgrade(); }
+    public void AddDashForce(float amount) { dashForce += amount; NotifyUpgrade(); }
+    public void AddAttackDamage(float amount) { attackDamage += amount; NotifyUpgrade(); }
+    public void AddAttackRate(float multiplier) { attackRate += multiplier; NotifyUpgrade(); }
+    public void AddProjectilesPerShot(int count) { projectilesPerShot += count; NotifyUpgrade(); }
+    public void AddPierceCount(int count) { pierceCount += count; NotifyUpgrade(); }
+    public void AddBulletSpeed(float amount) { bulletSpeed += amount; NotifyUpgrade(); }
+    public void AddPickupRange(float amount) { pickupRange += amount; NotifyUpgrade(); }
+
+    private void NotifyUpgrade()
+    {
+        PlaySound(upgradeSound);
+        OnStatsUpdated?.Invoke();
+    }
 
     public void TakeDamage(float amount)
     {
         if (currentHealth <= 0) return;
 
         currentHealth = Mathf.Max(0, currentHealth - amount);
+        PlaySound(takeDamageSound);
         OnHealthChanged?.Invoke();
 
         if (currentHealth <= 0 && ArcadeGameManager.Instance != null)
         {
             ArcadeGameManager.Instance.ResetGame();
+        }
+    }
+
+    private void PlaySound(AudioClip clip)
+    {
+        if (clip == null) return;
+
+        if (audioSource != null)
+        {
+            audioSource.PlayOneShot(clip);
+        }
+        else
+        {
+            AudioSource.PlayClipAtPoint(clip, transform.position);
         }
     }
 }
