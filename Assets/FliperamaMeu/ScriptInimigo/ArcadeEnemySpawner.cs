@@ -1,18 +1,40 @@
 using System.Collections;
 using System.Collections.Generic;
+using System.Reflection;
 using UnityEngine;
+
+[System.Serializable]
+public class EnemyConfig
+{
+    [HideInInspector] public string name; // Nome para identificação na lista
+    
+    [Header("Prefab e Liberação")]
+    public GameObject prefab;
+    [Tooltip("Nível mínimo do jogador para este inimigo começar a spawnar")]
+    public int minLevelToSpawn = 1;
+
+    [Tooltip("Peso/Proporção de spawn. Quanto maior o valor, mais comum ele é.")]
+    [Range(0.1f, 100f)]
+    public float spawnWeight = 10f;
+
+    [Header("Atributos Base")]
+    public float baseHealth = 20f;
+    public float baseDamage = 10f;
+    public float baseSpeed = 3f;
+    public float baseXP = 5f;
+
+    [Header("Escalonamento por Nível do Jogador")]
+    public float healthPerLevel = 5f;
+    public float damagePerLevel = 1.5f;
+    public float speedPerLevel = 0.1f;
+    public float xpPerLevel = 2f;
+}
 
 public class ArcadeEnemySpawner : MonoBehaviour
 {
-    [Header("Prefabs dos Inimigos por Nível")]
-    [Tooltip("Inimigo padrão (disponível desde o nível 1)")]
-    public GameObject enemyPrefab;
-
-    [Tooltip("Inimigo liberado após alcançar o nível 20")]
-    public GameObject level20EnemyPrefab;
-
-    [Tooltip("Inimigo liberado após alcançar o nível 50")]
-    public GameObject level50EnemyPrefab;
+    [Header("Lista de Inimigos Configuráveis")]
+    [Tooltip("Configure os prefabs, probabilidades e atributos individuais de cada inimigo.")]
+    public List<EnemyConfig> enemyConfigs = new List<EnemyConfig>();
 
     [Header("Câmera Ortográfica do Fliperama")]
     [Tooltip("A câmera 2D ortográfica que filma a tela")]
@@ -33,7 +55,7 @@ public class ArcadeEnemySpawner : MonoBehaviour
     public float minimumSpawnInterval = 0.3f;
     public float difficultyIncreaseRate = 0.02f;
 
-    [Header("Escalonamento de Quantidade por Nível")]
+    [Header("Escalonamento de Quantidade de Inimigos")]
     public int baseMaxEnemies = 5;
     public int additionalEnemiesPerLevel = 2;
     public int absoluteMaxEnemies = 50;
@@ -41,12 +63,6 @@ public class ArcadeEnemySpawner : MonoBehaviour
     [Header("Despawn por Fora de Tela")]
     [Tooltip("Tempo em segundos fora da visão da câmera para o inimigo ser removido")]
     public float timeOutOfScreenToDespawn = 15f;
-
-    [Header("Escalonamento por Nível do Jogador (Dificuldade)")]
-    public float healthIncreasePerLevel = 6f;
-    public float damageIncreasePerLevel = 1.5f;
-    public float speedIncreasePerLevel = 0.15f;
-    public float xpRewardIncreasePerLevel = 2f;
 
     private Transform playerTransform;
     private ArcadeCharacter2D character;
@@ -56,6 +72,22 @@ public class ArcadeEnemySpawner : MonoBehaviour
 
     private List<GameObject> activeEnemies = new List<GameObject>();
     private Dictionary<GameObject, float> outOfScreenTimers = new Dictionary<GameObject, float>();
+
+    private void OnValidate()
+    {
+        // Atualiza os nomes no Inspector para facilitar a visualização da lista
+        foreach (var config in enemyConfigs)
+        {
+            if (config.prefab != null)
+            {
+                config.name = $"{config.prefab.name} (Lvl Min: {config.minLevelToSpawn} | Peso: {config.spawnWeight})";
+            }
+            else
+            {
+                config.name = "[Prefab Não Atribuído]";
+            }
+        }
+    }
 
     private void Start()
     {
@@ -94,34 +126,40 @@ public class ArcadeEnemySpawner : MonoBehaviour
         return Mathf.Min(calculatedMax, absoluteMaxEnemies);
     }
 
-    private GameObject SelectEnemyPrefabByLevel(int currentLevel)
+    /// <summary>
+    /// Seleciona um inimigo elegível com base no nível atual e no sistema de pesos (spawnWeight)
+    /// </summary>
+    private EnemyConfig SelectWeightedEnemyConfig(int currentLevel)
     {
-        List<GameObject> availablePrefabs = new List<GameObject>();
+        List<EnemyConfig> validConfigs = new List<EnemyConfig>();
+        float totalWeight = 0f;
 
-        // 1. Inimigo Padrão (nível 1+)
-        if (enemyPrefab != null)
+        // Filtra inimigos disponíveis para o nível atual
+        foreach (var config in enemyConfigs)
         {
-            availablePrefabs.Add(enemyPrefab);
+            if (config.prefab != null && currentLevel >= config.minLevelToSpawn)
+            {
+                validConfigs.Add(config);
+                totalWeight += config.spawnWeight;
+            }
         }
 
-        // 2. Inimigo de Nível 20+
-        if (currentLevel >= 20 && level20EnemyPrefab != null)
+        if (validConfigs.Count == 0 || totalWeight <= 0f) return null;
+
+        // Sorteio baseado no peso
+        float randomValue = Random.Range(0f, totalWeight);
+        float currentSum = 0f;
+
+        foreach (var config in validConfigs)
         {
-            availablePrefabs.Add(level20EnemyPrefab);
+            currentSum += config.spawnWeight;
+            if (randomValue <= currentSum)
+            {
+                return config;
+            }
         }
 
-        // 3. Inimigo de Nível 50+
-        if (currentLevel >= 50 && level50EnemyPrefab != null)
-        {
-            availablePrefabs.Add(level50EnemyPrefab);
-        }
-
-        // Caso nenhum prefab tenha sido configurado no Inspector
-        if (availablePrefabs.Count == 0) return null;
-
-        // Sorteia um dos prefabs liberados até o momento
-        int randomIndex = Random.Range(0, availablePrefabs.Count);
-        return availablePrefabs[randomIndex];
+        return validConfigs[0];
     }
 
     private void TrySpawnEnemy()
@@ -130,9 +168,8 @@ public class ArcadeEnemySpawner : MonoBehaviour
 
         int currentLevel = (levelSystem != null) ? levelSystem.currentLevel : 1;
 
-        // Seleciona um prefab elegível para o nível atual
-        GameObject prefabToSpawn = SelectEnemyPrefabByLevel(currentLevel);
-        if (prefabToSpawn == null) return;
+        EnemyConfig selectedConfig = SelectWeightedEnemyConfig(currentLevel);
+        if (selectedConfig == null) return;
 
         activeEnemies.RemoveAll(enemy => enemy == null);
 
@@ -140,31 +177,38 @@ public class ArcadeEnemySpawner : MonoBehaviour
         if (activeEnemies.Count >= currentMaxEnemies) return;
 
         Vector3 spawnPos = CalculateOffscreenPosition();
-        GameObject enemyObj = Instantiate(prefabToSpawn, spawnPos, Quaternion.identity);
+        GameObject enemyObj = Instantiate(selectedConfig.prefab, spawnPos, Quaternion.identity);
         activeEnemies.Add(enemyObj);
 
-        // Chama o método SetupScaledStats usando SendMessage ou buscando o componente ArcadeEnemy base
+        int levelOffset = Mathf.Max(0, currentLevel - 1);
+
+        // Calcula os atributos escalonados especificamente para este tipo de inimigo
+        float finalHealth = selectedConfig.baseHealth + (levelOffset * selectedConfig.healthPerLevel);
+        float finalDamage = selectedConfig.baseDamage + (levelOffset * selectedConfig.damagePerLevel);
+        float finalSpeed = selectedConfig.baseSpeed + (levelOffset * selectedConfig.speedPerLevel);
+        float finalXP = selectedConfig.baseXP + (levelOffset * selectedConfig.xpPerLevel);
+
+        // 1. Aplicação via herança base ArcadeEnemy
         ArcadeEnemy baseEnemy = enemyObj.GetComponent<ArcadeEnemy>();
         if (baseEnemy != null)
         {
-            int levelOffset = Mathf.Max(0, currentLevel - 1);
-            float scaledHp = baseEnemy.maxHealth + (levelOffset * healthIncreasePerLevel);
-            float scaledDamage = baseEnemy.attackDamage + (levelOffset * damageIncreasePerLevel);
-            float scaledSpeed = baseEnemy.speed + (levelOffset * speedIncreasePerLevel);
-            float scaledXP = baseEnemy.xpReward + (levelOffset * xpRewardIncreasePerLevel);
-
-            baseEnemy.SetupScaledStats(scaledHp, scaledSpeed, scaledDamage, scaledXP);
+            baseEnemy.SetupScaledStats(finalHealth, finalSpeed, finalDamage, finalXP);
         }
         else
         {
-            // Fallback via reflexão de mensagens caso o prefab utilize outro script herdado diretamente
-            int levelOffset = Mathf.Max(0, currentLevel - 1);
-            float baseHp = 20f + (levelOffset * healthIncreasePerLevel);
-            float baseDamage = 15f + (levelOffset * damageIncreasePerLevel);
-            float baseSpeed = 3f + (levelOffset * speedIncreasePerLevel);
-            float baseXP = 5f + (levelOffset * xpRewardIncreasePerLevel);
+            // 2. Fallback via Reflexão C# para scripts customizados (ex: ArcadeAgileEnemy)
+            MonoBehaviour[] components = enemyObj.GetComponents<MonoBehaviour>();
+            foreach (MonoBehaviour comp in components)
+            {
+                if (comp == null) continue;
 
-            enemyObj.SendMessage("SetupScaledStats", new object[] { baseHp, baseSpeed, baseDamage, baseXP }, SendMessageOptions.DontRequireReceiver);
+                MethodInfo method = comp.GetType().GetMethod("SetupScaledStats");
+                if (method != null)
+                {
+                    method.Invoke(comp, new object[] { finalHealth, finalSpeed, finalDamage, finalXP });
+                    break;
+                }
+            }
         }
     }
 

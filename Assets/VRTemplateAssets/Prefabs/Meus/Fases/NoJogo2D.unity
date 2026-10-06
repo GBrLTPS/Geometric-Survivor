@@ -8835,6 +8835,14 @@ MonoBehaviour:
       m_Groups: 
       m_Action: Pause
       m_Flags: 0
+    - m_Name: 
+      m_Id: 47e1bd17-fea1-4475-91a4-82daba338adb
+      m_Path: <XRController>{LeftHand}/primaryButton
+      m_Interactions: 
+      m_Processors: 
+      m_Groups: 
+      m_Action: Pause
+      m_Flags: 0
     m_Flags: 0
     m_Priority: 0
   navigateAction:
@@ -92629,9 +92637,43 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d919952aa06d664488997f23735862b3, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::ArcadeEnemySpawner
-  enemyPrefab: {fileID: 5768380722706995399, guid: 08b9abfdf284ff9459e375ef134072a4, type: 3}
-  level20EnemyPrefab: {fileID: 5231636905408049325, guid: b7b36de2b683b6846ad344afcdc9d618, type: 3}
-  level50EnemyPrefab: {fileID: 166478413955195178, guid: 33d38d1b03c90fa4dae56b1b18146816, type: 3}
+  enemyConfigs:
+  - name: 'EnemyCube (Lvl Min: 0 | Peso: 1)'
+    prefab: {fileID: 5768380722706995399, guid: 08b9abfdf284ff9459e375ef134072a4, type: 3}
+    minLevelToSpawn: 0
+    spawnWeight: 1
+    baseHealth: 6
+    baseDamage: 5
+    baseSpeed: 1
+    baseXP: 2
+    healthPerLevel: 0.5
+    damagePerLevel: 0.5
+    speedPerLevel: 0.2
+    xpPerLevel: 0.5
+  - name: 'Triangle (Lvl Min: 20 | Peso: 4)'
+    prefab: {fileID: 5231636905408049325, guid: b7b36de2b683b6846ad344afcdc9d618, type: 3}
+    minLevelToSpawn: 20
+    spawnWeight: 4
+    baseHealth: 6
+    baseDamage: 3
+    baseSpeed: 20
+    baseXP: 6
+    healthPerLevel: 0.5
+    damagePerLevel: 0.2
+    speedPerLevel: 1
+    xpPerLevel: 2
+  - name: 'Hexagon Flat Top (Lvl Min: 50 | Peso: 10)'
+    prefab: {fileID: 166478413955195178, guid: 33d38d1b03c90fa4dae56b1b18146816, type: 3}
+    minLevelToSpawn: 50
+    spawnWeight: 10
+    baseHealth: 200
+    baseDamage: 150
+    baseSpeed: 1
+    baseXP: 500
+    healthPerLevel: 1
+    damagePerLevel: 0.2
+    speedPerLevel: 0.2
+    xpPerLevel: 0.5
   arcadeCamera: {fileID: 348344884}
   minSpawnDistance: 14
   maxSpawnDistance: 22
@@ -92642,12 +92684,8 @@ MonoBehaviour:
   difficultyIncreaseRate: 0.02
   baseMaxEnemies: 5
   additionalEnemiesPerLevel: 2
-  absoluteMaxEnemies: 1000
+  absoluteMaxEnemies: 30
   timeOutOfScreenToDespawn: 15
-  healthIncreasePerLevel: 4
-  damageIncreasePerLevel: 1.5
-  speedIncreasePerLevel: 0.11
-  xpRewardIncreasePerLevel: 2
 --- !u!4 &2143097665
 Transform:
   m_ObjectHideFlags: 0
