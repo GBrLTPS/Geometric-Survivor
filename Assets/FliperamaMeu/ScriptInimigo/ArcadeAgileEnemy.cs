@@ -15,10 +15,13 @@ public class ArcadeAgileEnemy : MonoBehaviour, IDamageable
     protected float nextDamageTime = 0f;
 
     [Header("Mecânica Única: Teleporte Zig-Zag")]
-    [Tooltip("Distância horizontal para qual o inimigo se teleporta ao acertar o jogador")]
+    [Tooltip("Distância horizontal para qual o inimigo se teleporta")]
     public float teleportDistance = 4f;
     [Tooltip("Som opcional tocado no momento do teleporte")]
     public AudioClip teleportSound;
+    [Tooltip("Tempo mínimo de espera entre teleportes causados por dano")]
+    public float damageTeleportCooldown = 0.2f;
+    private float nextDamageTeleportTime = 0f;
 
     [Header("Comportamento em Plataformas e Pulo")]
     public float jumpForce = 12f;
@@ -117,14 +120,12 @@ public class ArcadeAgileEnemy : MonoBehaviour, IDamageable
 
     private void FixedUpdate()
     {
-        // 1. Se o tempo do jogo estiver pausado (Menu de Power-Up / Pause)
         if (Time.timeScale == 0f)
         {
             if (rb != null) rb.linearVelocity = Vector2.zero;
             return;
         }
 
-        // 2. Se o jogador estiver com isPlaying == false (Game Over / Início de Fase)
         if (ArcadeGameManager.Instance != null && ArcadeGameManager.Instance.player != null)
         {
             if (!ArcadeGameManager.Instance.player.isPlaying)
@@ -138,7 +139,6 @@ public class ArcadeAgileEnemy : MonoBehaviour, IDamageable
 
         CheckGrounded();
 
-        // Persegue o player na horizontal
         float dir = Mathf.Sign(playerTransform.position.x - transform.position.x);
         rb.linearVelocity = new Vector2(dir * speed, rb.linearVelocity.y);
 
@@ -228,15 +228,17 @@ public class ArcadeAgileEnemy : MonoBehaviour, IDamageable
             flashRoutine = StartCoroutine(DamageFlash());
         }
 
-        if (playerTransform != null)
-        {
-            float pushDir = Mathf.Sign(transform.position.x - playerTransform.position.x);
-            rb.linearVelocity = new Vector2(pushDir * knockbackForce, rb.linearVelocity.y + 1f);
-        }
-
         if (currentHealth <= 0)
         {
             Die();
+            return;
+        }
+
+        // Executa o teleporte ao tomar dano respeitando o cooldown
+        if (playerTransform != null && Time.time >= nextDamageTeleportTime)
+        {
+            PerformSideTeleport(playerTransform);
+            nextDamageTeleportTime = Time.time + damageTeleportCooldown;
         }
     }
 
@@ -311,11 +313,9 @@ public class ArcadeAgileEnemy : MonoBehaviour, IDamageable
         ArcadeCharacterStats stats = target.GetComponentInParent<ArcadeCharacterStats>();
         if (stats != null)
         {
-            // Causa dano no jogador
             stats.TakeDamage(attackDamage);
             nextDamageTime = Time.time + damageCooldown;
 
-            // Teleporta o inimigo para o outro lado do jogador
             PerformSideTeleport(stats.transform);
         }
     }
@@ -324,13 +324,9 @@ public class ArcadeAgileEnemy : MonoBehaviour, IDamageable
     {
         if (pTransform == null) return;
 
-        // Descobre de qual lado do jogador ele está (1 = direita, -1 = esquerda)
         float currentSide = Mathf.Sign(transform.position.x - pTransform.position.x);
-
-        // Inverte o lado (-1 vira 1, e 1 vira -1)
         float targetSide = -currentSide;
 
-        // Calcula a nova posição X mantendo a altura Y atual
         Vector3 newPosition = new Vector3(
             pTransform.position.x + (targetSide * teleportDistance),
             transform.position.y,
@@ -339,7 +335,6 @@ public class ArcadeAgileEnemy : MonoBehaviour, IDamageable
 
         transform.position = newPosition;
 
-        // Aplica impulso na nova direção para ele continuar correndo em direção ao player
         if (rb != null)
         {
             rb.linearVelocity = new Vector2(-targetSide * speed, rb.linearVelocity.y);

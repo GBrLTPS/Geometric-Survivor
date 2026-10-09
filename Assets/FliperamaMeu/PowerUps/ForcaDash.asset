@@ -19,4 +19,4 @@ MonoBehaviour:
   icon: {fileID: -1540842399, guid: c8831b0b36b259647b543927135c0118, type: 3}
   maxLevel: 5
   type: 8
-  valuePerLevel: 3
+  valuePerLevel: 4

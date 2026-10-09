@@ -1,3 +1,4 @@
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.InputSystem;
@@ -26,8 +27,15 @@ public class ArcadeMainMenuDisplay : MonoBehaviour
     public List<ArcadeMenuButtonUI> optionButtons = new List<ArcadeMenuButtonUI>();
 
     [Header("Sons e Áudio")]
-    public AudioSource audioSource;
+    public AudioSource audioSource; // Efeitos sonoros (clique)
     public AudioClip clickSound;
+
+    [Header("Música do Menu")]
+    [Tooltip("Música de fundo que tocará apenas durante a interação com o menu")]
+    public AudioClip menuMusicClip;
+    [Range(0f, 1f)]
+    public float menuMusicVolume = 0.5f;
+    private AudioSource musicAudioSource; // Channel dedicado para a música
 
     [Header("Inputs de Navegação Interna")]
     [Tooltip("Inputs para navegar DEPOIS que o menu estiver ativado")]
@@ -45,11 +53,18 @@ public class ArcadeMainMenuDisplay : MonoBehaviour
 
     private void Awake()
     {
+        // Configura AudioSource para Efeitos Sonoros
         if (audioSource == null)
         {
             audioSource = GetComponent<AudioSource>();
             if (audioSource == null) audioSource = gameObject.AddComponent<AudioSource>();
         }
+
+        // Configura AudioSource dedicado para a Música
+        musicAudioSource = gameObject.AddComponent<AudioSource>();
+        musicAudioSource.loop = true;
+        musicAudioSource.playOnAwake = false;
+        musicAudioSource.volume = menuMusicVolume;
     }
 
     private void OnEnable()
@@ -101,7 +116,7 @@ public class ArcadeMainMenuDisplay : MonoBehaviour
         SetInteractionState(!isInteracting);
     }
 
-    // Função que aplica a lógica visual e trava/destrava os comandos
+    // Função que aplica a lógica visual e trava/destrava os comandos e música
     private void SetInteractionState(bool state)
     {
         isInteracting = state;
@@ -112,9 +127,12 @@ public class ArcadeMainMenuDisplay : MonoBehaviour
             targetObjectToDisable.SetActive(!isInteracting);
         }
 
-        // Se acabou de entrar no menu, reseta a seleção para o primeiro botão
+        // Controle da Música do Menu
         if (isInteracting)
         {
+            PlayMenuMusic();
+
+            // Reseta a seleção para o primeiro botão
             selectedIndex = 0;
             isInOptions = false; // Garante que comece no menu principal
             
@@ -122,6 +140,31 @@ public class ArcadeMainMenuDisplay : MonoBehaviour
             if (optionsPanelContainer != null) optionsPanelContainer.SetActive(false);
             
             UpdateHighlight();
+        }
+        else
+        {
+            StopMenuMusic();
+        }
+    }
+
+    private void PlayMenuMusic()
+    {
+        if (menuMusicClip != null && musicAudioSource != null && !isMuted)
+        {
+            if (!musicAudioSource.isPlaying)
+            {
+                musicAudioSource.clip = menuMusicClip;
+                musicAudioSource.volume = menuMusicVolume;
+                musicAudioSource.Play();
+            }
+        }
+    }
+
+    private void StopMenuMusic()
+    {
+        if (musicAudioSource != null && musicAudioSource.isPlaying)
+        {
+            musicAudioSource.Stop();
         }
     }
 
@@ -206,7 +249,8 @@ public class ArcadeMainMenuDisplay : MonoBehaviour
 
     public void StartGame()
     {
-        // Ao clicar em JOGAR, saímos da interação e carregamos a cena
+        // Ao clicar em JOGAR, paramos a música e trocamos de cena
+        StopMenuMusic();
         SetInteractionState(false);
 
         if (!string.IsNullOrEmpty(gameSceneName))
@@ -240,6 +284,16 @@ public class ArcadeMainMenuDisplay : MonoBehaviour
     public void ToggleMute()
     {
         isMuted = !isMuted;
+
+        if (isMuted)
+        {
+            StopMenuMusic();
+        }
+        else if (isInteracting)
+        {
+            PlayMenuMusic();
+        }
+
         AudioListener.pause = isMuted;
         AudioListener.volume = isMuted ? 0f : 1f;
     }
